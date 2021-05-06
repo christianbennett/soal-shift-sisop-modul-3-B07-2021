@@ -16,8 +16,10 @@ void exec1()
     close(pipe1[0]);
     close(pipe1[1]);
     // exec
-    char *argv[] = {"ps", "-aux", NULL};
-    execv("/bin/ps", argv);
+    // char *argv[] = {"ps", "-aux", NULL};
+    // execv("/bin/ps", argv);
+    char *argv[] = {"ls", NULL};
+    execv("/bin/ls", argv);
 }
 
 void exec2()
