@@ -49,9 +49,8 @@ void printFact(int n, int m)
 void main()
 {
     key_t key = 1234;
-    int *value;
     int shmid = shmget(key, sizeof(int), IPC_CREAT | 0666);
-    value = shmat(shmid, NULL, 0);
+    int *arr = (int *)shmat(key, NULL, 0);
 
     int matrix[4][6];
 
@@ -59,7 +58,7 @@ void main()
     {
         for (int j = 0; j < 6; j++)
         {
-            matrix[i][j] = *value;
+            matrix[i][j] = arr[i * 6 + j];
         }
     }
 
@@ -111,6 +110,6 @@ void main()
         printf("\n");
     }
 
-    shmdt(value);
+    shmdt(arr);
     shmctl(shmid, IPC_RMID, NULL);
 }
