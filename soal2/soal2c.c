@@ -3,80 +3,55 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int pid;
-int pipe1[2];
-int pipe2[2];
-
-void exec1()
+int main(void)
 {
-    // input from stdin (already done)
-    // output to pipe1
-    dup2(pipe1[1], 1);
-    // close fds
-    close(pipe1[0]);
-    close(pipe1[1]);
-    // exec
-    // char *argv[] = {"ps", "-aux", NULL};
-    // execv("/bin/ps", argv);
-    char *argv[] = {"ls", NULL};
-    execv("/bin/ls", argv);
-}
+    int pipe_A[2];
+    int pipe_B[2];
+    pid_t pid_A, pid_B, pid_C;
 
-void exec2()
-{
-    // input from pipe1
-    dup2(pipe1[0], 0);
-    // output to pipe2
-    dup2(pipe2[1], 1);
-    // close fds
-    close(pipe1[0]);
-    close(pipe1[1]);
-    close(pipe2[0]);
-    close(pipe2[1]);
-    // exec
-    char *argv[] = {"sort", "-nrk", "3,3", NULL};
-    execv("/bin/sort", argv);
-}
+    pipe(pipe_A);
 
-void exec3()
-{
-    // input from pipe2
-    dup2(pipe2[0], 0);
-    // output to stdout (already done)
-    // close fds
-    close(pipe2[0]);
-    close(pipe2[1]);
-    // exec
-    char *argv[] = {"head", "-5", NULL};
-    execv("/bin/head", argv);
-}
-
-int main()
-{
-    if (pipe(pipe1) == -1)
+    if (!(pid_A = fork()))
     {
-        perror("bad pipe1");
-        exit(1);
+        close(pipe_A[0]); // A-read not needed here
+
+        close(1);
+        dup(pipe_A[1]);
+        close(pipe_A[1]); //do not pass A-write twice
+
+        execlp("/bin/ps", "ps", "aux", NULL);
     }
 
-    if (pipe(pipe2) == -1)
-    {
-        perror("bad pipe2");
-        exit(1);
-    }
+    close(pipe_A[1]); // A-write not needed anymore
 
-    if (pid = fork() == 0)
-    {
-        exec1();
-    }
+    pipe(pipe_B); //do not create this pipe until needed
 
-    if (pid = fork() == 0)
+    if (!(pid_B = fork()))
     {
-        exec2();
-    }
+        close(pipe_B[0]); // B-read not needed here
 
-    if (pid = fork() == 0)
-    {
-        exec3();
+        close(0);
+        dup(pipe_A[0]);
+        close(pipe_A[0]); //do not pass A-read twice
+
+        close(1);
+        dup(pipe_B[1]);
+        close(pipe_B[1]); //do not pass B-write twice
+
+        execlp("/usr/bin/sort", "sort", "-nrk", "3,3", NULL);
     }
+    close(pipe_A[0]); // A-read not needed anymore
+    close(pipe_B[1]); // B-write not needed anymore
+
+    if (!(pid_C = fork()))
+    {
+
+        close(0);
+        dup(pipe_B[0]);
+        close(pipe_B[0]); // do not pass B-read twice
+
+        execlp("/usr/bin/head", "head", "-5", NULL);
+    }
+    close(pipe_B[0]); // B-read not needed anymore
+    return 0;
 }
