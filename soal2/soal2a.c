@@ -64,6 +64,4 @@ void main()
 
     shmdt(value);
     shmctl(shmid, IPC_RMID, NULL);
-
-    return 0;
 }
