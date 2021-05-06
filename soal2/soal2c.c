@@ -16,7 +16,7 @@ void exec1()
     close(pipe1[0]);
     close(pipe1[1]);
     // exec
-    char *argv[] = {"ps", "aux", NULL};
+    char *argv[] = {"ps", "-aux", NULL};
     execv("/bin/ps", argv);
 }
 
