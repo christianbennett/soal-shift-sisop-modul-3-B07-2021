@@ -6,10 +6,10 @@
 void main()
 {
     key_t key = 1234;
-    int shmid = shmget(key, sizeof(int), IPC_CREAT | 0666);
+    int shmid = shmget(key, sizeof(int) * 4 * 6, IPC_CREAT | 0666);
 
     int *arr;
-    arr = shmat(key, NULL, 0);
+    arr = (int *)shmat(key, NULL, 0);
     int matrix[4][6], mat1[4][3], mat2[3][6];
 
     printf("This is a program to calculate matrix mutlipication.\nEnter the element of the first matrix: (Matrix[4][3])\n");
@@ -62,7 +62,7 @@ void main()
     {
         for (int j = 0; j < 6; j++)
         {
-            *arr = matrix[i][j];
+            arr[i * 6 + j] = matrix[i][j];
             printf("arr[%d][%d] = %d\n", i, j, *arr);
             sleep(1);
         }
