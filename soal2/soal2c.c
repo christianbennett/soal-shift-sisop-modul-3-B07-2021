@@ -3,55 +3,56 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int main(void)
+int main()
 {
-    int pipe_A[2];
-    int pipe_B[2];
-    pid_t pid_A, pid_B, pid_C;
+    int pipe1[2];
+    int pipe2[2];
 
-    pipe(pipe_A);
+    pipe(pipe1);
 
-    if (!(pid_A = fork()))
+    if (fork() == 0)
     {
-        close(pipe_A[0]); // A-read not needed here
-
-        close(1);
-        dup(pipe_A[1]);
-        close(pipe_A[1]); //do not pass A-write twice
+        //close read dari pipe A
+        close(pipe1[0]);
+        dup2(pipe1[1], 1);
+        //do not pass A-write twice
+        close(pipe1[1]);
 
         execlp("/bin/ps", "ps", "aux", NULL);
     }
 
-    close(pipe_A[1]); // A-write not needed anymore
+    close(pipe1[1]); // A-write not needed anymore
 
-    pipe(pipe_B); //do not create this pipe until needed
+    pipe(pipe2); //do not create this pipe until needed
 
-    if (!(pid_B = fork()))
+    if (fork() == 0)
     {
-        close(pipe_B[0]); // B-read not needed here
+        //close read dari pipe B
+        close(pipe2[0]);
 
-        close(0);
-        dup(pipe_A[0]);
-        close(pipe_A[0]); //do not pass A-read twice
-
-        close(1);
-        dup(pipe_B[1]);
-        close(pipe_B[1]); //do not pass B-write twice
+        dup2(pipe1[0], 0);
+        //do not pass A-read twice
+        close(pipe1[0]);
+        dup2(pipe2[1], 1);
+        //do not pass B-write twice
+        close(pipe2[1]);
 
         execlp("/usr/bin/sort", "sort", "-nrk", "3,3", NULL);
     }
-    close(pipe_A[0]); // A-read not needed anymore
-    close(pipe_B[1]); // B-write not needed anymore
+    // A-read not needed anymore
+    close(pipe1[0]);
+    // B-write not needed anymore
+    close(pipe2[1]);
 
-    if (!(pid_C = fork()))
+    if (fork() == 0)
     {
-
-        close(0);
-        dup(pipe_B[0]);
-        close(pipe_B[0]); // do not pass B-read twice
+        dup2(pipe2[0], 0);
+        // do not pass B-read twice
+        close(pipe2[0]);
 
         execlp("/usr/bin/head", "head", "-5", NULL);
     }
-    close(pipe_B[0]); // B-read not needed anymore
+    // B-read not needed anymore
+    close(pipe2[0]);
     return 0;
 }
