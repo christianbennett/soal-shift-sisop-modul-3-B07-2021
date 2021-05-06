@@ -50,7 +50,8 @@ void main()
 {
     key_t key = 1234;
     int shmid = shmget(key, sizeof(int), IPC_CREAT | 0666);
-    int *arr = (int *)shmat(key, NULL, 0);
+
+    int *arr = shmat(key, NULL, 0);
 
     int matrix[4][6];
 
@@ -58,8 +59,18 @@ void main()
     {
         for (int j = 0; j < 6; j++)
         {
-            matrix[i][j] = arr[i * 6 + j];
+            matrix[i][j] = *arr;
         }
+    }
+
+    printf("Matrix: \n");
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            printf("[%d]\t", matrix[i][j]);
+        }
+        printf("\n");
     }
 
     int newMatrix[4][6];
