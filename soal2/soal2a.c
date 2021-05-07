@@ -62,7 +62,7 @@ void main()
         for (int j = 0; j < 6; j++)
         {
             arr[i * 6 + j] = matrix[i][j];
-            printf("arr[%d][%d] = %d\n", i, j, arr[i * 6 + j]);
+            // printf("arr[%d][%d] = %d\n", i, j, arr[i * 6 + j]);
             // sleep(1);
         }
     }
