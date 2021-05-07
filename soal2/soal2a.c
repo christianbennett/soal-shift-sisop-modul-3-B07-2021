@@ -62,10 +62,12 @@ void main()
         for (int j = 0; j < 6; j++)
         {
             arr[i * 6 + j] = matrix[i][j];
-            printf("arr[%d][%d] = %d\n", i, j, *arr);
-            sleep(1);
+            printf("arr[%d][%d] = %d\n", i, j, arr[i * 6 + j]);
+            // sleep(1);
         }
     }
+    printf("Run program 2.\n");
+    sleep(30);
 
     shmdt(arr);
     shmctl(shmid, IPC_RMID, NULL);
