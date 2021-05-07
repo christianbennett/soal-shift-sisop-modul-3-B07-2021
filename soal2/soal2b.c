@@ -43,7 +43,7 @@ void printFact(int n, int m)
         }
         // printf("\n");
     }
-    printf("]\t");
+    printf("] ");
 }
 
 void main()
