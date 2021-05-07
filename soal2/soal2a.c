@@ -69,8 +69,8 @@ void main()
     printf("Run program 2.\n");
     for (int i = 30; i > 0; i--)
     {
-        sleep(1);
         printf("%d...\n", i);
+        sleep(1);
     }
 
     shmdt(arr);
