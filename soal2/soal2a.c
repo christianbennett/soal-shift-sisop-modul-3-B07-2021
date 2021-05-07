@@ -67,7 +67,11 @@ void main()
         }
     }
     printf("Run program 2.\n");
-    sleep(30);
+    for (int i = 30; i > 0; i--)
+    {
+        sleep(1);
+        printf("%d...\n", i);
+    }
 
     shmdt(arr);
     shmctl(shmid, IPC_RMID, NULL);
