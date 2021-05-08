@@ -117,8 +117,6 @@ void main()
                 // printFact(n, m);
                 args.arg1 = n;
                 args.arg2 = m;
-                pthread_create(&tid[index], NULL, &funct, (void *)&args);
-                index++;
             }
             else if (newMatrix[i][j] > matrix[i][j])
             {
@@ -129,8 +127,6 @@ void main()
                 // printFact(n, n);
                 args.arg1 = n;
                 args.arg2 = n;
-                pthread_create(&tid[index], NULL, &funct, (void *)&args);
-                index++;
             }
             else if (matrix[i][j] == 0)
             {
@@ -138,10 +134,11 @@ void main()
                 // printFact(0, 0);
                 args.arg1 = 0;
                 args.arg2 = 0;
-                pthread_create(&tid[index], NULL, &funct, (void *)&args);
-                index++;
+
                 // printf("0");
             }
+            pthread_create(&tid[index], NULL, &funct, (void *)&args);
+            index++;
             // printf("\t");
             // printf("[%d]\t", hasil[i][j]);
             // printf("[%d]-[%d]\t", matrix[i][j], newMatrix[i][j]);
