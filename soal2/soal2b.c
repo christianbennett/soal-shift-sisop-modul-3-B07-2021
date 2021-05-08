@@ -143,7 +143,7 @@ void main()
             // printf("\t");
             // printf("[%d]\t", hasil[i][j]);
             // printf("[%d]-[%d]\t", matrix[i][j], newMatrix[i][j]);
-                }
+        }
         printf("\n");
     }
 
