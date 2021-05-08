@@ -57,7 +57,7 @@ void *funct(void *arguments)
 {
     struct arg_struct *args = (struct arg_struct *)arguments;
 
-    printfFact(args->arg1, args->arg2);
+    printFact(args->arg1, args->arg2);
 }
 
 void main()
