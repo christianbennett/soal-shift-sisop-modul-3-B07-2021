@@ -91,8 +91,7 @@ void recursive(char *basePath)
 
 int main(int argc, char *argv[]) {
   
-  /*3a
-  Perintah -f */
+  /*Perintah -f */
 
   //letak argumen pada char 1 akan dibandingkan dengan -f, jika sama maka akan diproses
   if (strcmp(argv[1],"-f")==0){  
@@ -110,8 +109,7 @@ int main(int argc, char *argv[]) {
     }
   }
   
-  /*3b
-  Perintah -d */
+  /*Perintah -d */
   else if (strcmp(argv[1],"-d") == 0 ) { 
         
   }
