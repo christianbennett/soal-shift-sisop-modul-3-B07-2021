@@ -2,6 +2,13 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <unistd.h>
+#include <pthread.h>
+
+struct arg_struct
+{
+    int arg1;
+    int arg2;
+};
 
 int fact(int n)
 {
@@ -46,6 +53,13 @@ void printFact(int n, int m)
     printf("] ");
 }
 
+void *funct(void *arguments)
+{
+    struct arg_struct *args = (struct arg_struct *)arguments;
+
+    printfFact(args->arg1, args->arg2);
+}
+
 void main()
 {
     key_t key = 1234;
@@ -83,8 +97,10 @@ void main()
         }
     }
 
-    int hasil[4][6];
-    int n, m;
+    // int hasil[4][6];
+    int n, m, index = 0;
+    pthread_t tid[24];
+    struct arg_struct args;
 
     printf("Output matrix: \n");
     for (int i = 0; i < 4; i++)
@@ -98,7 +114,11 @@ void main()
                 m = newMatrix[i][j];
                 // printf("%d", fact(n - m));
                 // hasil[i][j] = fact(n) / fact(n - m);
-                printFact(n, m);
+                // printFact(n, m);
+                args.arg1 = n;
+                args.arg2 = m;
+                pthread_create(&tid[index], NULL, &funct, (void *)&args);
+                index++;
             }
             else if (newMatrix[i][j] > matrix[i][j])
             {
@@ -106,12 +126,20 @@ void main()
                 n = matrix[i][j];
                 // printf("%d", fact(n));
                 // hasil[i][j] = fact(n);
-                printFact(n, n);
+                // printFact(n, n);
+                args.arg1 = n;
+                args.arg2 = n;
+                pthread_create(&tid[index], NULL, &funct, (void *)&args);
+                index++;
             }
             else if (matrix[i][j] == 0)
             {
                 // hasil[i][j] = 0;
-                printFact(0, 0);
+                // printFact(0, 0);
+                args.arg1 = 0;
+                args.arg2 = 0;
+                pthread_create(&tid[index], NULL, &funct, (void *)&args);
+                index++;
                 // printf("0");
             }
             // printf("\t");
@@ -119,6 +147,11 @@ void main()
             // printf("[%d]-[%d]\t", matrix[i][j], newMatrix[i][j]);
         }
         printf("\n");
+    }
+
+    for (int i = 0; i < index; i++)
+    {
+        pthread_join(tid[i], NULL);
     }
 
     shmdt(arr);
