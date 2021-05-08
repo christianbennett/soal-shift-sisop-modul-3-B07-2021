@@ -138,17 +138,19 @@ void main()
                 // printf("0");
             }
             pthread_create(&tid[index], NULL, &funct, (void *)&args);
+            pthread_join(tid[index], NULL);
             index++;
             // printf("\t");
             // printf("[%d]\t", hasil[i][j]);
             // printf("[%d]-[%d]\t", matrix[i][j], newMatrix[i][j]);
-            for (int i = 0; i < index; i++)
-            {
-                pthread_join(tid[i], NULL);
-            }
-        }
+                }
         printf("\n");
     }
+
+    // for (int i = 0; i < index; i++)
+    // {
+    //     pthread_join(tid[i], NULL);
+    // }
 
     shmdt(arr);
     shmctl(shmid, IPC_RMID, NULL);
