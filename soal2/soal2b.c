@@ -142,13 +142,12 @@ void main()
             // printf("\t");
             // printf("[%d]\t", hasil[i][j]);
             // printf("[%d]-[%d]\t", matrix[i][j], newMatrix[i][j]);
+            for (int i = 0; i < index; i++)
+            {
+                pthread_join(tid[i], NULL);
+            }
         }
         printf("\n");
-    }
-
-    for (int i = 0; i < index; i++)
-    {
-        pthread_join(tid[i], NULL);
     }
 
     shmdt(arr);
