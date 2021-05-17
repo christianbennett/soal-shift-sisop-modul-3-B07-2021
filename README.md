@@ -3,10 +3,11 @@
 * Christian Bennett Robin 05111940000078
 * Zelda Elma Sibuea 05111940000038
 * Hanifa Fauziah 05111940000024
-##Soal 1
+## Soal 1
 
-##Soal 2
+## Soal 2
 Crypto (kamu) adalah teman Loba. Suatu pagi, Crypto melihat Loba yang sedang kewalahan mengerjakan tugas dari bosnya. Karena Crypto adalah orang yang sangat menyukai tantangan, dia ingin membantu Loba mengerjakan tugasnya. Detil dari tugas tersebut adalah:
+
 ###2A###
 Membuat program perkalian matrix (4x3 dengan 3x6) dan menampilkan hasilnya. Matriks nantinya akan berisi angka 1-20 (tidak perlu dibuat filter angka).
 
@@ -302,4 +303,4 @@ if (fork() == 0)
 
 ![soal2c](Screenshots/2c.jpg)
 
-##Soal 3
+## Soal 3
