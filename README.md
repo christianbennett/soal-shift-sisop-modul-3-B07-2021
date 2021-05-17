@@ -166,7 +166,7 @@ printf("Output matrix: \n");
     }
 ```
 
-Untuk fungsi yang dipakai yaitu pertama `c void printFact(int n, int m)`, yaitu untuk melakukan print deret faktorial, n sebagai batas atasnya dan n-m sebagai batas bawahnya. Contoh: jika n = 5, m = 6, maka hasilnya adalah 5\*4\*3\*2\*1, jika n = 5, m = 0, maka hasilnya 0, dan jika n = 5, m = 2, maka hasilnya 5\*4.
+Untuk fungsi yang dipakai yaitu pertama `void printFact(int n, int m)`, yaitu untuk melakukan print deret faktorial, n sebagai batas atasnya dan n-m sebagai batas bawahnya. Contoh: jika n = 5, m = 6, maka hasilnya adalah 5\*4\*3\*2\*1, jika n = 5, m = 0, maka hasilnya 0, dan jika n = 5, m = 2, maka hasilnya 5\*4.
 
 ```c
 void printFact(int n, int m)
@@ -203,7 +203,7 @@ void printFact(int n, int m)
 }
 ```
 
-Lalu untuk fungsi yang memanggil fungsi `c void printFact(int, int)` tadi dalam bentuk thread merupakan fungsi `c void *funct(void arguments)`, yaitu: 
+Lalu untuk fungsi yang memanggil fungsi `void printFact(int, int)` tadi dalam bentuk thread merupakan fungsi `void *funct(void arguments)`, yaitu: 
 
 ```c
 void *funct(void *arguments)
@@ -227,7 +227,7 @@ struct arg_struct
 ![soal2b](Screenshots/2b.jpg)
 
 ### 2C ###
-Karena takut lag dalam pengerjaannya membantu Loba, Crypto juga membuat program (soal2c.c) untuk mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “`c ps aux | sort -nrk 3,3 | head -5`” (Catatan!: Harus menggunakan IPC Pipes)
+Karena takut lag dalam pengerjaannya membantu Loba, Crypto juga membuat program (soal2c.c) untuk mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “`ps aux | sort -nrk 3,3 | head -5`” (Catatan!: Harus menggunakan IPC Pipes)
 
 Pertama-tama menginisialisasi kedua pipe yang akan digunakan menggunakan: 
 
@@ -255,7 +255,7 @@ Lalu melakukan pipe dan fork untuk proses pertama.
     close(pipe1[1]);
 ```
  
-`c close(pipe1[0])` untuk menutup bagian read dari pipe1, lalu `c dup2(pipe1[1], 1)` untuk meredirect output proses dari standart output ke bagian write pipe1, dan `c close(pipe1[1])` untuk mengclose bagian read dari pipe1. `c execlp("/bin/ps", "ps", "aux", NULL)` untuk melakukan proses `ps aux`, dan terakhir bagian write dari pipe1 diclose meggunakan `c close(pipe1[1])`.
+`close(pipe1[0])` untuk menutup bagian read dari pipe1, lalu `dup2(pipe1[1], 1)` untuk meredirect output proses dari standart output ke bagian write pipe1, dan `close(pipe1[1])` untuk mengclose bagian read dari pipe1. `execlp("/bin/ps", "ps", "aux", NULL)` untuk melakukan proses `ps aux`, dan terakhir bagian write dari pipe1 diclose meggunakan `close(pipe1[1])`.
  
  Lalu lanjut membuat pipe dan fork untuk proses kedua.
  
@@ -282,7 +282,7 @@ Lalu melakukan pipe dan fork untuk proses pertama.
     close(pipe2[1]);
 ```
  
-Mirip dengan bagian sebelumnya, bedanya disini `c dup2(pipe1[0], 0)` dilakukan untuk meredirect standart input ke bagian read pipe1, dan `c dup2(pipe2[1], 1)` untuk meredirect standard output pipe2 ke bagian write pipe2. Lalu `c execlp("/usr/bin/sort", "sort", "-nrk", "3,3", NULL)` untuk melakukan proses `sort -nrk 3,3`, terakhir mengclose bagian read dari pipe1 dan write dari pipe2 agar tidak terjadi memory leak.
+Mirip dengan bagian sebelumnya, bedanya disini `dup2(pipe1[0], 0)` dilakukan untuk meredirect standart input ke bagian read pipe1, dan `dup2(pipe2[1], 1)` untuk meredirect standard output pipe2 ke bagian write pipe2. Lalu `execlp("/usr/bin/sort", "sort", "-nrk", "3,3", NULL)` untuk melakukan proses `sort -nrk 3,3`, terakhir mengclose bagian read dari pipe1 dan write dari pipe2 agar tidak terjadi memory leak.
 
 Dan dilanjuti dengan pipe dan fork proses terakhir.
 
@@ -299,7 +299,7 @@ if (fork() == 0)
     close(pipe2[0]);
 ```
 
-`c dup2(pipe2[0], 0)` dilakukan untuk meredirect standard input ke bagian read dari pipe2. Lalu dilanjuti dengan pemanggilan proses menggunakan `c  execlp("/usr/bin/head", "head", "-5", NULL)` untuk melakukanp proses `head -5`, dan mengclose bagian read dari pipe2.
+`dup2(pipe2[0], 0)` dilakukan untuk meredirect standard input ke bagian read dari pipe2. Lalu dilanjuti dengan pemanggilan proses menggunakan `execlp("/usr/bin/head", "head", "-5", NULL)` untuk melakukanp proses `head -5`, dan mengclose bagian read dari pipe2.
 
 ![soal2c](Screenshots/2c.jpg)
 
