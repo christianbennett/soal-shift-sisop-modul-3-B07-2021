@@ -83,7 +83,7 @@ printf("Run program 2.\n");
     }
 ```
 
-![soal2a](Screenshots/2a.jpg)
+![soal2a](Screenshots/2a.png)
 
 ### 2B ###
 Membuat program dengan menggunakan matriks output dari program sebelumnya (program soal2a.c) (Catatan!: gunakan shared memory). Kemudian matriks tersebut akan dilakukan perhitungan dengan matrix baru (input user) sebagai berikut contoh perhitungan untuk matriks yang ada. Perhitungannya adalah setiap cel yang berasal dari matriks A menjadi angka untuk faktorial, lalu cel dari matriks B menjadi batas maksimal faktorialnya (dari paling besar ke paling kecil) (Catatan!: gunakan thread untuk perhitungan di setiap cel).
@@ -224,7 +224,7 @@ struct arg_struct
 };
 ```
 
-![soal2b](Screenshots/2b.jpg)
+![soal2b](Screenshots/2b.png)
 
 ### 2C ###
 Karena takut lag dalam pengerjaannya membantu Loba, Crypto juga membuat program (soal2c.c) untuk mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “`ps aux | sort -nrk 3,3 | head -5`” (Catatan!: Harus menggunakan IPC Pipes)
@@ -301,6 +301,6 @@ if (fork() == 0)
 
 `dup2(pipe2[0], 0)` dilakukan untuk meredirect standard input ke bagian read dari pipe2. Lalu dilanjuti dengan pemanggilan proses menggunakan `execlp("/usr/bin/head", "head", "-5", NULL)` untuk melakukanp proses `head -5`, dan mengclose bagian read dari pipe2.
 
-![soal2c](Screenshots/2c.jpg)
+![soal2c](Screenshots/2c.png)
 
 ## Soal 3
