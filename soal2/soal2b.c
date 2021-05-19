@@ -23,9 +23,10 @@ int fact(int n)
 void printFact(int n, int m)
 {
     int lim = n - m;
-    int count = 0;
+    // int count = 0;
+    int hasil = 1;
     // printf("lim = %d\n", lim);
-    printf("[");
+    // printf("[");
     if (n == 0 || m == 0)
     {
         printf("0");
@@ -40,17 +41,19 @@ void printFact(int n, int m)
             }
             else
             {
-                printf("%d", n);
+                // printf("%d", n);
+                hasil *= n;
             }
-            if (count != m - 1)
-            {
-                printf("*");
-                count++;
-            }
+            // if (count != m - 1)
+            // {
+            //     printf("*");
+            //     count++;
+            // }
         }
+        printf("%d", hasil);
         // printf("\n");
     }
-    printf("] ");
+    // printf("] ");
 }
 
 void *funct(void *arguments)
