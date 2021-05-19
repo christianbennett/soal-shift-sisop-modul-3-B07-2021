@@ -227,7 +227,7 @@ struct arg_struct
 };
 ```
 
-![soal2b](Screenshots/2b.png)
+![soal2b](Screenshots/2.png)
 
 ### 2C ###
 Karena takut lag dalam pengerjaannya membantu Loba, Crypto juga membuat program (soal2c.c) untuk mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “`ps aux | sort -nrk 3,3 | head -5`” (Catatan!: Harus menggunakan IPC Pipes)
