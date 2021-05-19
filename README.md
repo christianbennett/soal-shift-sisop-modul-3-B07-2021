@@ -306,4 +306,7 @@ if (fork() == 0)
 
 ![soal2c](Screenshots/2c.png)
 
+### Kesulitan ###
+Kesulitan yang dialami pada soal ini adalah saat ingin memindahkan isi dari array di program pertama ke program kedua. Hal ini terjadi karena saya salah menginputkan parameter pada salah satu fungsi shared memorynya. Selain itu contoh soal pada soal 2b juga sedikit berbeda dengan yang saya pikirkan, saya pikir yang di print merupakan deret faktorialnya seperti `10*9*8`, ternyata yang diinginkan adalah `720`. 
+
 ## Soal 3
