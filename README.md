@@ -166,13 +166,14 @@ printf("Output matrix: \n");
     }
 ```
 
-Untuk fungsi yang dipakai yaitu pertama `void printFact(int n, int m)`, yaitu untuk melakukan print deret faktorial, n sebagai batas atasnya dan n-m sebagai batas bawahnya. Contoh: jika n = 5, m = 6, maka hasilnya adalah 5\*4\*3\*2\*1, jika n = 5, m = 0, maka hasilnya 0, dan jika n = 5, m = 2, maka hasilnya 5\*4.
+Untuk fungsi yang dipakai yaitu pertama `void printFact(int n, int m)`, yaitu untuk melakukan print hasil faktorial, n sebagai batas atasnya dan n-m sebagai batas bawahnya.
 
 ```c
 void printFact(int n, int m)
 {
     int lim = n - m;
-    int count = 0;
+    // int count = 0;
+    int hasil = 1;
     // printf("lim = %d\n", lim);
     printf("[");
     if (n == 0 || m == 0)
@@ -189,14 +190,16 @@ void printFact(int n, int m)
             }
             else
             {
-                printf("%d", n);
+                // printf("%d", n);
+                hasil *= n;
             }
-            if (count != m - 1)
-            {
-                printf("*");
-                count++;
-            }
+            // if (count != m - 1)
+            // {
+            //     printf("*");
+            //     count++;
+            // }
         }
+        printf("%d", hasil);
         // printf("\n");
     }
     printf("] ");
