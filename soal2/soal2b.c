@@ -26,7 +26,7 @@ void printFact(int n, int m)
     // int count = 0;
     int hasil = 1;
     // printf("lim = %d\n", lim);
-    // printf("[");
+    printf("[");
     if (n == 0 || m == 0)
     {
         printf("0");
@@ -53,7 +53,7 @@ void printFact(int n, int m)
         printf("%d", hasil);
         // printf("\n");
     }
-    // printf("] ");
+    printf("] ");
 }
 
 void *funct(void *arguments)
