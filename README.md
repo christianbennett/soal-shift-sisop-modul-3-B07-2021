@@ -352,7 +352,7 @@ else if (strcmp(argv[1],"-d") == 0 ) {
     } 
     ```
   
-  * Fungsi ` recursive` merupakan fungsi untuk traverse direktori adapun kode nya adalah sebagai berikut
+   Fungsi ` recursive` merupakan fungsi untuk traverse direktori adapun kode nya adalah sebagai berikut
    ```c
    void recursive(char *basePath) //traverse direktori
 {
