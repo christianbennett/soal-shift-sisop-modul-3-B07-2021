@@ -409,10 +409,42 @@ else if (strcmp(argv[1],"-d") == 0 ) {
     return 0;
 }
 ```
-
-    
-    
-
-
+ ### Soal 3d dan 3e  ###
+ Semua file harus berada di dalam folder, jika terdapat file yang tidak memiliki ekstensi, file disimpan dalam folder `“unknown”`. Jika file hidden, masuk folder `“hidden”`.
+ ```c
+  if(namaFiles[0]=='.'){
+        ext = "hidden";
+    }else{
+        namaFiles = strtok(namaFiles, ".");
+        if(strcmp(namaFilesLama, namaFiles)==0){
+            ext = "unknown"; 
+        }else{
+            ext = strtok(NULL, "");
+            for (int i=0;i < strlen(ext);i++){
+                ext[i] = tolower(ext[i]);
+            }
+        }
+```
+Kode-kode di bawah ini merupakan isi dari thread `myFile` yang mengkategorikan suatu file dan untuk mendapatkan nama file beserta ekstensinya. Sementara kode di bawah ini untuk mendapatkan ekstensi dari file tersebut.
+```c
+void *myFile (void *judulFiles) {
+    char *ext;
+    char judulBaru[2000];
+    char *judulFiles1 = (char*) judulFiles;
+    snprintf(judulBaru, sizeof judulBaru, "%s", judulFiles1);
+    char *judul = judulFiles;
+    char *namaFiles;
+    namaFiles = strrchr(judulFiles, '/');
+    namaFiles = strtok(namaFiles, "/");
+    char namaFilesLama[10000];
+    snprintf(namaFilesLama, sizeof namaFilesLama, "%s", namaFiles);
+```
+Pada soal, karena ekstensi yang diminta tidak case sensitive, maka digunakan kode berikut untuk mengubah apabila terdapat huruf kapital menjadi huruf kecil.
+```c
+  for (int i=0;i < strlen(ext);i++){
+                ext[i] = tolower(ext[i]);
+            }
+```
+Berikut
   
   
