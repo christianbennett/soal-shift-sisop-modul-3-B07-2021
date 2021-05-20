@@ -315,7 +315,8 @@ Ayub menyarankan untuk membuat sebuah program C agar file-file dapat dikategorik
 
 ### Soal 3a ###
 Pada soal ini apabila argumennya `"-f"`, program akan mengkategorikan file yang ada pada argumen ke dalam folder berdasarkan ekstensi file tersebut, dan folder berada pada working directory program.
-` if (strcmp(argv[1],"-f")==0){  
+```c
+if (strcmp(argv[1],"-f")==0){  
         perintah = argv[1];
         int jumlah = 2;
         int jalankan = 2;
@@ -328,12 +329,13 @@ Pada soal ini apabila argumennya `"-f"`, program akan mengkategorikan file yang 
             jalankan++;
         }
     }
-  `
+  ```
   Kode di atas akan melakukan looping sebanyak argumen file yang diinput dan memasukkannya ke thread yang dibuat untuk memindahkan file.
   
  ### Soal 3b ###
 Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan mengkategorikan semua file pada folder yang diberikan pada argumen ke dalam folder berdasarkan ekstensi file tersebut, dan folder berada pada working directory program.
-`else if (strcmp(argv[1],"-d") == 0 ) { 
+```c
+else if (strcmp(argv[1],"-d") == 0 ) { 
         perintah = argv[1];
         recursive(argv[2]);
         for(int i=0; i<nomor; i++){
@@ -347,10 +349,12 @@ Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan me
         }else{
             printf("Yah, gagal disimpan :(\n");
         }
-    } `
-   
-   * Fungsi ` recursive` merupakan fungsi untuk traverse direktori adapun kode nya adalah sebagai berikut
-   `void recursive(char *basePath) //traverse direktori
+    } 
+    ```
+  
+  * Fungsi ` recursive` merupakan fungsi untuk traverse direktori adapun kode nya adalah sebagai berikut
+   ```c
+   void recursive(char *basePath) //traverse direktori
 {
     char path[1000];
     struct dirent *dp;
@@ -375,7 +379,7 @@ Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan me
 
     closedir(dir);
 }
-`
+```
 * `DIR *dir;` adalah pointer yang menunjuk ke direktori
 
 * `dir = opendir(basePath)` untuk membuka direktori.
@@ -384,7 +388,8 @@ Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan me
 
  ### Soal 3c ###
  Pada soal ini, apabila argumennya `"*"`, program akan mengkategorikan semua file yang ada pada working directory ke dalam folder berdasarkan ekstensinya
- `else if (strcmp(argv[1],"*") == 0 ) { 
+ ```c 
+ else if (strcmp(argv[1],"*") == 0 ) { 
         perintah = argv[1];
         recursive(".");
         for(int i=0; i<nomor; i++){
@@ -401,7 +406,8 @@ Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan me
     }
     
     return 0;
-}`
+}
+```
 
     
     
