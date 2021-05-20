@@ -445,6 +445,8 @@ Pada soal, karena ekstensi yang diminta tidak case sensitive, maka digunakan kod
                 ext[i] = tolower(ext[i]);
             }
 ```
-Berikut
+Berikut ini jika kita ingin me-*run* perintah `-f`.
+
+
   
   
