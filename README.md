@@ -447,7 +447,6 @@ Pada soal, karena ekstensi yang diminta tidak case sensitive, maka digunakan kod
 ```
 
 * Berikut ini jika kita ingin me-*run* perintah `-f`.
-<br>
 <img width="600" alt="sisop 3 fix codingan" src="https://user-images.githubusercontent.com/73489643/118986060-35e8e880-b9a9-11eb-824a-66d6202dcbc6.PNG">
 
 Dan berikut ini merupakan hasil pengkategorian file nya
@@ -459,8 +458,14 @@ Dan berikut ini merupakan hasil pengkategorian file nya
 <img width="595" alt="sisop 3 a 4 unknown" src="https://user-images.githubusercontent.com/73489643/118986444-911adb00-b9a9-11eb-911e-4644da679afb.PNG">
 
 * Berikut ini jika kita ingin me-*run* perintah `-d`.
- <br>
 <img width="600" alt="sisop 3 -d" src="https://user-images.githubusercontent.com/73489643/118987419-7006ba00-b9aa-11eb-826d-e27471a717c4.PNG">
 
 Dan berikut ini merupakan hasilnya
 <img width="595" alt="sisop 3 -d ssnya fix" src="https://user-images.githubusercontent.com/73489643/118987643-a8a69380-b9aa-11eb-97f5-47dcbb94e17a.PNG">
+
+* Berikut ini jika kita ingin me-*run* perintah `*`.
+<img width="600" alt="sisop 3 bintang" src="https://user-images.githubusercontent.com/73489643/118987941-f1f6e300-b9aa-11eb-8272-e3132ed3afd3.PNG">
+
+Dan berikut ini merupakan hasilnya
+<img width="595" alt="sisop 3 bintang ss" src="https://user-images.githubusercontent.com/73489643/118988070-0d61ee00-b9ab-11eb-9397-77a80c3d43a8.PNG">
+
