@@ -314,4 +314,98 @@ Kesulitan yang dialami pada soal ini adalah saat ingin memindahkan isi dari arra
 Ayub menyarankan untuk membuat sebuah program C agar file-file dapat dikategorikan. Program ini akan memindahkan file sesuai ekstensinya ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Apabila file tersebut tidak memiliki ekstensi maka file tersebut akan dipindahkan ke folder Unknown. Terdapat tiga mode untuk mengkategorikan file, yaitu -f, *, dan -d.
 
 ### Soal 3a ###
-Pada 
+Pada soal ini apabila argumennya `"-f"`, program akan mengkategorikan file yang ada pada argumen ke dalam folder berdasarkan ekstensi file tersebut, dan folder berada pada working directory program.
+` if (strcmp(argv[1],"-f")==0){  
+        perintah = argv[1];
+        int jumlah = 2;
+        int jalankan = 2;
+        while (jumlah < argc) {
+            pthread_create(&(thread[jumlah]), NULL, myFile, (char*)argv[jumlah]);
+            jumlah++;
+        }
+        while (jalankan < argc) {
+            pthread_join(thread[jalankan],NULL);
+            jalankan++;
+        }
+    }
+  `
+  Kode di atas akan melakukan looping sebanyak argumen file yang diinput dan memasukkannya ke thread yang dibuat untuk memindahkan file.
+  
+ ### Soal 3b ###
+Pada soal ini, apabila argumen yang diterima adalah `"-d"`, maka program akan mengkategorikan semua file pada folder yang diberikan pada argumen ke dalam folder berdasarkan ekstensi file tersebut, dan folder berada pada working directory program.
+`else if (strcmp(argv[1],"-d") == 0 ) { 
+        perintah = argv[1];
+        recursive(argv[2]);
+        for(int i=0; i<nomor; i++){
+            pthread_create(&(thread[i]), NULL, myFile, (char*)namaFilesNih[i]);
+        }
+        for(int i=0; i<nomor; i++){
+            pthread_join(thread[i],NULL);
+        }
+        if(keberhasilan == 1){
+            printf("Direktori sukses disimpan!\n");
+        }else{
+            printf("Yah, gagal disimpan :(\n");
+        }
+    } `
+   
+   * Fungsi ` recursive` merupakan fungsi untuk traverse direktori adapun kode nya adalah sebagai berikut
+   `void recursive(char *basePath) //traverse direktori
+{
+    char path[1000];
+    struct dirent *dp;
+    DIR *dir = opendir(basePath);
+
+    if (!dir)
+        return;
+
+    while ((dp = readdir(dir)) != NULL)
+    {
+        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+        {
+            
+            strcpy(path, basePath);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+            strcpy(namaFilesNih[nomor], path);
+            nomor++;
+            recursive(path);
+        }
+    }
+
+    closedir(dir);
+}
+`
+* `DIR *dir;` adalah pointer yang menunjuk ke direktori
+
+* `dir = opendir(basePath)` untuk membuka direktori.
+
+* `while( (dp=readdir(dir)))` adalah looping ketika dalam direktori tersebut ada file/folder didalamnya
+
+ ### Soal 3c ###
+ Pada soal ini, apabila argumennya `"*"`, program akan mengkategorikan semua file yang ada pada working directory ke dalam folder berdasarkan ekstensinya
+ `else if (strcmp(argv[1],"*") == 0 ) { 
+        perintah = argv[1];
+        recursive(".");
+        for(int i=0; i<nomor; i++){
+            pthread_create(&(thread[i]), NULL, myFile, (char*)namaFilesNih[i]);
+        }
+        for(int i=0; i<nomor; i++){
+            pthread_join(thread[i],NULL);
+        }
+        if(keberhasilan == 1){
+            printf("Direktori sukses disimpan!\n");
+        }else{
+            printf("Yah, gagal disimpan :(\n");
+        }
+    }
+    
+    return 0;
+}`
+
+    
+    
+
+
+  
+  
