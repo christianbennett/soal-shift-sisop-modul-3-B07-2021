@@ -472,4 +472,4 @@ Dan berikut ini merupakan hasilnya
 <img width="600" alt="sisop 3 bintang ss" src="https://user-images.githubusercontent.com/73489643/118988070-0d61ee00-b9ab-11eb-9397-77a80c3d43a8.PNG">
 
 ### Kesulitan ###
-Kesulitan yang dialami dalam kode ini yaitu untuk membuat program perintah -f,-d dan * kami masih ada beberapa kesulitan. Lalu untuk test case nya kurang seperti file hidden belum ada, jadi sulit untuk menentukannya bagaimana. 
+Kesulitan yang dialami dalam kode ini yaitu untuk membuat program perintah -f,-d dan * kami masih ada beberapa kesulitan.Selain itu dalam membuat pengkategorian file hidden karena sebelumnya tidak tahu bagaimana itu file yang dimasukkan dalam kategori hidden. Lalu untuk test case nya kurang seperti file hidden belum ada, jadi sulit untuk menentukannya bagaimana. 
