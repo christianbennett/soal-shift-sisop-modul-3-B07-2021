@@ -446,7 +446,8 @@ Pada soal, karena ekstensi yang diminta tidak case sensitive, maka digunakan kod
             }
 ```
 Berikut ini jika kita ingin me-*run* perintah `-f`.
-<img width="426" alt="sisop 3 a 1" src="https://user-images.githubusercontent.com/73489643/118985378-988db480-b9a8-11eb-8272-ed7c18ef33d5.PNG">
+<br>
+<img width="1000" alt="sisop 3 a 1" src="https://user-images.githubusercontent.com/73489643/118985378-988db480-b9a8-11eb-8272-ed7c18ef33d5.PNG"> 
 
   
   
