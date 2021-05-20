@@ -445,6 +445,7 @@ Pada soal, karena ekstensi yang diminta tidak case sensitive, maka digunakan kod
                 ext[i] = tolower(ext[i]);
             }
 ```
+
 * Berikut ini jika kita ingin me-*run* perintah `-f`.
 <br>
 <img width="800" alt="sisop 3 fix codingan" src="https://user-images.githubusercontent.com/73489643/118986060-35e8e880-b9a9-11eb-824a-66d6202dcbc6.PNG">
