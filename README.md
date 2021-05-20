@@ -471,3 +471,5 @@ Dan berikut ini merupakan hasilnya
 <br>
 <img width="600" alt="sisop 3 bintang ss" src="https://user-images.githubusercontent.com/73489643/118988070-0d61ee00-b9ab-11eb-9397-77a80c3d43a8.PNG">
 
+### Kesulitan ###
+Kesulitan yang dialami dalam kode ini yaitu untuk membuat program perintah -f,-d dan * kami masih ada beberapa kesulitan. Lalu untuk test case nya kurang seperti file hidden belum ada, jadi sulit untuk menentukannya bagaimana. 
