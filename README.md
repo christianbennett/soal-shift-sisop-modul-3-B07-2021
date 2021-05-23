@@ -492,6 +492,7 @@ Hapus : File2.ektensi (id:pass)
 ```
 
 **Penyelesaian**
+
 Disini akan menyimpan log apabila terjadi penambahan atau penghapusan pada filenya. Disini saya menggunakan fungsi log_action. Di fungsi ini, apabila terjadi penambahan (add) maka file yang ditambah akan ditulis sebagai Tambah : namafile (identitasuser). Begitupun dengan penghapusan file, apabila ada command delete dari user, maka akan ditulis didalam running.loh sebagai Hapus : namafile (identitasuser).
 
 **server.c**
