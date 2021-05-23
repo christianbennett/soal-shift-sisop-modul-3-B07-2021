@@ -65,6 +65,7 @@ Filepath:
 Kemudian, dari aplikasi client akan dimasukan data buku tersebut (perlu diingat bahwa Filepath ini merupakan path file yang akan dikirim ke server). Lalu client nanti akan melakukan pengiriman file ke aplikasi server dengan menggunakan socket. Ketika file diterima di server, maka row dari files.tsv akan bertambah sesuai dengan data terbaru yang ditambahkan.
 
 **Penyelesaian**
+
 Pada awalnya client akan membuat file dimana file tersebut akan dibuka dan itu akan dikirimkan ke server. Dimana server akan menerima file tersebut, dan akan menyimpannya di folder FILES.
 
 **client.c**
@@ -104,6 +105,7 @@ if (!des_fd) {
 Pada tahap ini juga terdapat penambahan data pada files.tsv, dimana ditambahkannya sesuai dengan inputan yang dimasukkan user pada sisi client. Hal ini diawali dengan server yang menerima inputan dari user berupa detail yang ada pada file tersebut. Lalu,server akan memproses filepath yang telah diinput oleh user disisi client, lalu server akan menyimpan file tersebut ditempat yang diminta. Pada saat ini juga, server akan membuka files.tsv dan menambahkan inputan yang dimasukkan.
 
 **server.c**
+
 saat file dibaca oleh server.
 
 ```c
@@ -125,8 +127,8 @@ fclose(fp);
 ![add1](https://user-images.githubusercontent.com/80946219/119261991-d9353a00-bc03-11eb-8d62-2c9cc6c769ff.png)
 
 
-
 ### 1D ###
+
 Dan client dapat mendownload file yang telah ada dalam folder FILES di server, sehingga sistem harus dapat mengirim file ke client. Server harus melihat dari files.tsv untuk melakukan pengecekan apakah file tersebut valid. Jika tidak valid, maka mengirimkan pesan error balik ke client. Jika berhasil, file akan dikirim dan akan diterima ke client di folder client tersebut. 
 
 **Penyelesaian**
@@ -317,6 +319,76 @@ Filepath :
 
 ```
 
+**Penyelesaian**
+
+Pada awalnya, client akan mengirimkan command `see`. Lalu server akan menerima command tersebut. Setelah itu, server akan membuka files.tsv dan mencari file tersebut. Disini serevr akan membaca files.tsv dan membaca tiap baris yang ada disana hingga mendapat baris yang diinginkan. Setelah itu, informasi ini akan dikirim ke Client oleh server dan client akan menerima informasi dengan format sesuai yang telah ditentukan.
+
+**client.c**
+
+```c
+else if (equal(command, "see")) {
+                        send(sock, command, STR_SIZE, 0);
+                        memset(buffer, 0, sizeof(buffer));
+
+                        while (valread = read(sock, buffer, STR_SIZE)) {
+                            if (equal(buffer, "e")) {
+                                break;
+                            }
+                            printf("%s", buffer);
+                        }
+
+                        continue; 
+                    }
+```
+
+**server.c**
+
+```c
+else if (equal("see", buffer)) {
+                        fp = fopen("files.tsv", "r");
+                        if (!fp) {
+                            send(new_socket, "e", sizeof("e"), 0);
+                            memset(buffer, 0, sizeof(buffer));
+                            continue;
+                        }
+
+                        char *line = NULL;
+                        ssize_t len = 0;
+                        ssize_t file_read;
+                        while ((file_read = getline(&line, &len, fp) != -1)) {
+                            Entry temp_entry;
+                            read_tsv_line(&temp_entry, line);
+
+                            // read extension
+                            char ext[SIZE];
+                            int i = 0;
+                            while (temp_entry.path[i] != '.') {
+                                i++;
+                            }
+                            int j = 0;
+                            while (temp_entry.path[i] != '\0') {
+                                ext[j] = temp_entry.path[i];
+                                i++;
+                                j++;
+                            }
+                            ext[j] = '\0';
+
+                            char message[STR_SIZE];
+                            sprintf(message, "Nama : %s\nPublisher : %s\nTahun Publishing : %s\nEkstensi File : %s\nFilepath : %s\n\n", 
+                                    temp_entry.name, temp_entry.publisher, temp_entry.year, ext, temp_entry.path);
+                            
+                            send(new_socket, message, STR_SIZE, 0);
+                        }
+                        send(new_socket, "e", sizeof("e"), 0);
+                        fclose(fp);
+                    }
+```
+
+**Hasil**
+
+![See](https://user-images.githubusercontent.com/80946219/119263257-87db7980-bc08-11eb-9344-f26c15b43836.png)
+
+
 ### 1G ###
 Aplikasi client juga dapat melakukan pencarian dengan memberikan suatu string. Hasilnya adalah semua nama file yang mengandung string tersebut. Format output seperti format output f.
 
@@ -325,6 +397,89 @@ Contoh Client Command:
 find TEMP
 ```
 
+**Penyelesaian**
+
+Pada soal ini, akan dicari file dengan string yang diinput oleh user. Dimana pencarian dari file dicek di dalam files.tsv. Apabila ketemu, maka akan menampilkan nama, tahun publish, dll. Disini client akan mengirim perintah keserver, dimana perintah tersebut akan diterima oleh server, lalu server akan membuka file files.tsv di tiap barisnya dimana disini menggunakan perintah strstr.
+
+**server.c**
+
+```c
+else if (equal("find", buffer)) {
+                        valread = read(new_socket, buffer, STR_SIZE);
+
+                        fp = fopen("files.tsv", "r");
+
+                        char *line = NULL;
+                        ssize_t len = 0;
+                        ssize_t file_read;
+
+                        bool found = false;
+                        char error_message[] = "No such file found.\n";
+
+                        while ((file_read = getline(&line, &len, fp) != -1)) {
+                            Entry temp_entry;
+                            read_tsv_line(&temp_entry, line);
+
+                            char *h;
+                            if ((h = strstr(temp_entry.name, buffer)) != NULL) {
+                                found = true;
+
+                                // read extension
+                                char ext[SIZE];
+                                int i = 0;
+                                while (temp_entry.path[i] != '.') {
+                                    i++;
+                                }
+                                int j = 0;
+                                while (temp_entry.path[i] != '\0') {
+                                    ext[j] = temp_entry.path[i];
+                                    i++;
+                                    j++;
+                                }
+                                ext[j] = '\0';
+
+                                char message[STR_SIZE];
+                                sprintf(message, "Nama : %s\nPublisher : %s\nTahun Publishing : %s\nEkstensi File : %s\nFilepath : %s\n\n", 
+                                        temp_entry.name, temp_entry.publisher, temp_entry.year, ext, temp_entry.path);
+                                
+                                send(new_socket, message, STR_SIZE, 0);
+                            }
+                        }
+                        if (!found) {
+                            send(new_socket, error_message, STR_SIZE, 0);
+                        }
+                        send(new_socket, "e", sizeof("e"), 0);
+                        fclose(fp);
+                    }
+```
+
+**client.c**
+
+```c
+else if (equal(command, "find")) {
+                        send(sock, command, STR_SIZE, 0);
+                        memset(buffer, 0, sizeof(buffer));
+
+                        scanf("%s", command);
+                        send(sock, command, STR_SIZE, 0);
+
+                        while (valread = read(sock, buffer, STR_SIZE)) {
+                            if (equal(buffer, "e")) {
+                                break;
+                            }
+                            printf("%s", buffer);
+                        }
+                        continue;
+                    }
+                    else {
+                        printf("command not recognized\n");
+                        continue;
+                    }
+```
+
+**Hasil**
+
+![find](https://user-images.githubusercontent.com/80946219/119263469-5ca55a00-bc09-11eb-8ad4-e3f193ff181f.png)
 
 
 ### 1H ###
@@ -335,6 +490,39 @@ Dikarenakan Keverk waspada dengan pertambahan dan penghapusan file di server, ma
 Tambah : File1.ektensi (id:pass)
 Hapus : File2.ektensi (id:pass)
 ```
+
+**Penyelesaian**
+Disini akan menyimpan log apabila terjadi penambahan atau penghapusan pada filenya. Disini saya menggunakan fungsi log_action. Di fungsi ini, apabila terjadi penambahan (add) maka file yang ditambah akan ditulis sebagai Tambah : namafile (identitasuser). Begitupun dengan penghapusan file, apabila ada command delete dari user, maka akan ditulis didalam running.loh sebagai Hapus : namafile (identitasuser).
+
+**server.c**
+
+```c
+void log_action(char *type, char *fileName, char *user, char *pass) {
+    FILE *log;
+    char action[16];
+
+    if (equal(type, "add")) {
+        strcpy(action, "Tambah");
+    }
+    else if (equal(type, "delete")) {
+        strcpy(action, "Hapus");
+    }
+
+    log = fopen("running.log", "a");
+    fprintf(log, "%s : %s (%s:%s)\n", action, fileName, user, pass);
+    fclose(log);
+
+    return;
+}
+
+```
+
+Pemanggilan terhadap fungsi ini disertai dengan parameter nama file, nama user dan passwordnya.
+
+**Hasil**
+
+![log](https://user-images.githubusercontent.com/80946219/119263640-1e5c6a80-bc0a-11eb-82fc-3faa05e06184.png)
+
 
 ### Kendala ###
 Pada saat pengerjaan soal ini, kami masih belum terlalu mengerti terkait pemakaian threading. Selain itu, minggu pengerjaan soal shift juga merupakan minggu ets. 
