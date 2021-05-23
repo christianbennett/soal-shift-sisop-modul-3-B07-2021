@@ -10,6 +10,37 @@ Keverk adalah orang yang cukup ambisius dan terkenal di angkatannya. Sebelum dia
 ### 1A ###
 Pada saat client tersambung dengan server, terdapat dua pilihan pertama, yaitu register dan login. Jika memilih `register`, client akan diminta input id dan passwordnya untuk dikirimkan ke server. User juga dapat melakukan login. `Login` berhasil jika id dan password yang dikirim dari aplikasi client sesuai dengan list akun yang ada didalam aplikasi server. Sistem ini juga dapat menerima multi-connections. Koneksi terhitung ketika aplikasi client tersambung dengan server. Jika terdapat 2 koneksi atau lebih maka harus menunggu sampai client pertama keluar untuk bisa melakukan login dan mengakses aplikasinya. Keverk menginginkan lokasi penyimpanan id dan password pada file bernama **akun.txt**.
 
+**Penyelesaian**
+
+Pada soal ini diminta untuk membuat program yang bisa menyambungkan antara server dengan client dimana client bisa melakukan login dan juga register.
+Pada fungsi Register, diawali dengan dikirim send yang akan diterima oleh server yang berisi "register" gunanya agar server mengetahui perintah apa yang diminta oleh user. Lalu server akan membaca buffer yang berisi register tersebut dan mengirimkan kepada client bahwa perintah yang diminta telah diterima. Lalu pada client diminta untuk memasukkan username dan password dengan format yang sesuai. Username dan password tersebut akan di kirim ke server. Server menerima, dan menjalankan perintah untuk menulis inputan tersebut ke akun.txt. Setelah ditulis, maka server akan menyuruh disisi client untuk menampilkan 'Register Succes'.
+
+**Hasil**
+![Register](https://user-images.githubusercontent.com/80946219/119261149-4a72ee00-bc00-11eb-9c66-5f9c97c1ff0f.png)
+
+Pada fungsi Login, diawali dengan pembacaan inputan dari user dibagian client, ketika membaca kata `login` maka server menerima perintah tersebut dan melakukan hal yang seharusnya dia lakukan. Yaitu dibagian client akan diminta untuk memasukkan username dan password. Lalu inputan akan dibandingkan dengan yang ada didalam file akun.txt yang berisikan list dari username dan password user yang telah melakukan register. Apabila inputan dengan yang ada di akun.txt sama, maka disisi Server akan menganggap login berhasil dan melakukan send ke bagian client. Dimana di bagian client akan ditampilkan bahwa Login Success. Lalu, disisi client akan ditampilkan menu utama berupa list perintah untuk mengotak-atik database yang ada di folder `Files`. 
+
+**Hasil**
+![Login](https://user-images.githubusercontent.com/80946219/119261285-eb61a900-bc00-11eb-8767-f1a29ae27764.png)
+
+Disini menggunakan thread untuk dapat memungkinkan terjadinya lebih dari 1 koneksi Client ke Server.
+```c
+while(true) {
+        if ((new_socket = accept(server_fd, 
+            (struct sockaddr *) &address, (socklen_t*) &addr_len)) < 0) {
+            perror("accept");
+            exit(EXIT_FAILURE);
+        }
+        pthread_create(&(tid[total]), NULL, &client, &new_socket);
+        total++;
+    }
+
+```
+
+**Hasil**
+![wait](https://user-images.githubusercontent.com/80946219/119261325-164bfd00-bc01-11eb-895e-a279584384fc.png)
+
+
 ### 1B ###
 Sistem memiliki sebuah database yang bernama files.tsv. Isi dari files.tsv ini adalah path file saat berada di server, publisher, dan tahun publikasi. Setiap penambahan dan penghapusan file pada folder file yang bernama  FILES pada server akan memengaruhi isi dari files.tsv. Folder FILES otomatis dibuat saat server dijalankan. 
 
@@ -33,11 +64,235 @@ Filepath:
 
 Kemudian, dari aplikasi client akan dimasukan data buku tersebut (perlu diingat bahwa Filepath ini merupakan path file yang akan dikirim ke server). Lalu client nanti akan melakukan pengiriman file ke aplikasi server dengan menggunakan socket. Ketika file diterima di server, maka row dari files.tsv akan bertambah sesuai dengan data terbaru yang ditambahkan.
 
+**Penyelesaian**
+Pada awalnya client akan membuat file dimana file tersebut akan dibuka dan itu akan dikirimkan ke server. Dimana server akan menerima file tersebut, dan akan menyimpannya di folder FILES.
+
+**client.c**
+
+```c
+int fd = open(data, O_RDONLY);
+if (!fd) {
+  perror("can't open");
+  exit(EXIT_FAILURE);
+}
+
+int read_len;
+while (true) {
+  memset(data, 0x00, STR_SIZE);
+  read_len = read(fd, data, STR_SIZE);
+
+  if (read_len == 0) {
+    break;
+  }
+  else {
+    send(sock, data, read_len, 0);                               
+  }
+}
+close(fd);
+```
+
+**server.c**
+
+```c
+int des_fd = open(request.path, O_WRONLY | O_CREAT | O_EXCL, 0700);
+if (!des_fd) {
+  perror("can't open file");
+  exit(EXIT_FAILURE);
+}
+```
+
+Pada tahap ini juga terdapat penambahan data pada files.tsv, dimana ditambahkannya sesuai dengan inputan yang dimasukkan user pada sisi client. Hal ini diawali dengan server yang menerima inputan dari user berupa detail yang ada pada file tersebut. Lalu,server akan memproses filepath yang telah diinput oleh user disisi client, lalu server akan menyimpan file tersebut ditempat yang diminta. Pada saat ini juga, server akan membuka files.tsv dan menambahkan inputan yang dimasukkan.
+
+**server.c**
+saat file dibaca oleh server.
+
+```c
+valread = read(new_socket, request.publisher, STR_SIZE);
+valread = read(new_socket, request.year, STR_SIZE);
+valread = read(new_socket, clientPath, STR_SIZE);
+```
+
+saat detail file diinput ke files.tsv
+
+```c
+fp = fopen("files.tsv", "a");
+fprintf(fp, "%s\t%s\t%s\n", request.path, request.publisher, request.year);
+fclose(fp);
+```
+
+**Hasil**
+![add](https://user-images.githubusercontent.com/80946219/119261951-ba36a800-bc03-11eb-8a49-f320d03bbae6.png)
+![add1](https://user-images.githubusercontent.com/80946219/119261991-d9353a00-bc03-11eb-8d62-2c9cc6c769ff.png)
+
+
+
 ### 1D ###
 Dan client dapat mendownload file yang telah ada dalam folder FILES di server, sehingga sistem harus dapat mengirim file ke client. Server harus melihat dari files.tsv untuk melakukan pengecekan apakah file tersebut valid. Jika tidak valid, maka mengirimkan pesan error balik ke client. Jika berhasil, file akan dikirim dan akan diterima ke client di folder client tersebut. 
 
+**Penyelesaian**
+
+**client.c**
+```c
+else if (equal(command, "download")) {
+                        send(sock, command, STR_SIZE, 0);
+                        memset(buffer, 0, sizeof(buffer));
+
+                        scanf("%s", command);
+                        send(sock, command, STR_SIZE, 0);
+                        valread = read(sock, buffer, STR_SIZE);
+
+                        char good_message[] = "File ready to download.\n";
+                        if (equal(buffer, good_message)) {
+                            printf("attempting to download: %s\n", command);
+                            int des_fd = open(command, O_WRONLY | O_CREAT | O_EXCL, 0700);
+                            if (!des_fd) {
+                                perror("can't open file");
+                                exit(EXIT_FAILURE);
+                            }
+
+                            int file_read_len;
+                            char buff[STR_SIZE];
+
+                            while (true) {
+                                memset(buff, 0x00, STR_SIZE);
+                                file_read_len = read(sock, buff, STR_SIZE);
+                                write(des_fd, buff, file_read_len);
+                                break;
+                            }
+                        }
+
+                        printf("message: %s", buffer);
+                        continue;
+                    }
+```
+
+**server.c**
+```c
+else if (equal("download", buffer)) {
+                        valread = read(new_socket, buffer, STR_SIZE);
+
+                        fp = fopen("files.tsv", "r");
+
+                        char *line = NULL;
+                        ssize_t len = 0;
+                        ssize_t file_read;
+
+                        bool found = false;
+                        char error_message[] = "No such file found.\n";
+                        char good_message[] = "File ready to download.\n";
+                        char file_loc[STR_SIZE];
+
+                        while ((file_read = getline(&line, &len, fp) != -1)) {
+                            Entry temp_entry;
+                            read_tsv_line(&temp_entry, line);
+
+                            if (equal(buffer, temp_entry.name)) {
+                                found = true;
+                                strcpy(file_loc, temp_entry.path);
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            send(new_socket, error_message, STR_SIZE, 0);
+                        }
+                        else {
+                            send(new_socket, good_message, STR_SIZE, 0);
+                            
+                            printf("attempt to send: %s\n", file_loc);
+                            int fd = open(file_loc, O_RDONLY);
+                            if (!fd) {
+                                perror("can't open");
+                                exit(EXIT_FAILURE);
+                            }
+
+                            int read_len;
+                            while (true) {
+                                memset(file_loc, 0x00, STR_SIZE);
+                                read_len = read(fd, file_loc, STR_SIZE);
+
+                                if (read_len == 0) {
+                                    break;
+                                }
+                                else {
+                                    send(new_socket, file_loc, read_len, 0);                               
+                                }
+                            }
+                            close(fd);
+                        }
+                        fclose(fp);
+                    }
+```
+Pada saat mendownload file ini, client akan mengirimkan informasi berupa nama file yang akan didownload. Saat informasi terebut diterima oleh server, maka dilakukan pengecekan pada files.tsv apakah terdapa file yang ingin didownload. Jika tidak, maka server akan mengirimkan pesan bahwa file yang ingin didownload tidak ada.
+
+**Hasil**
+![download](https://user-images.githubusercontent.com/80946219/119262341-06361c80-bc05-11eb-83df-6dd8b1a0d2dd.png)
+
+
 ### 1E ###
 Setelah itu, client juga dapat menghapus file yang tersimpan di server. Akan tetapi, Keverk takut file yang dibuang adalah file yang penting, maka file hanya akan diganti namanya menjadi ‘old-NamaFile.ekstensi’. Ketika file telah diubah namanya, maka row dari file tersebut di file.tsv akan terhapus.
+
+**Penyelesaian**
+**server.c**
+```c
+else if (equal("delete", buffer)) {
+                        valread = read(new_socket, buffer, STR_SIZE);
+
+                        fp = fopen("files.tsv", "r");
+
+                        char *line = NULL;
+                        ssize_t len = 0;
+                        ssize_t file_read;
+
+                        bool found = false;
+                        char error_message[] = "No such file found.\n";
+                        char good_message[] = "deleted.\n";
+
+                        int index = 0;
+
+                        while ((file_read = getline(&line, &len, fp) != -1)) {
+                            Entry temp_entry;
+                            read_tsv_line(&temp_entry, line);
+
+                            if (equal(buffer, temp_entry.name)) {
+                                found = true;
+                                char old[] = "FILES/old-";
+                                strcat(old, temp_entry.name);
+                                rename(temp_entry.path, old);
+                                log_action("delete", temp_entry.name, akun.name, akun.password);
+                                break;
+                            }
+                            index++;
+                        }
+                        if (!found) {
+                            send(new_socket, error_message, STR_SIZE, 0);
+                        }
+                        else {
+                            removeLine(index);
+                            send(new_socket, good_message, STR_SIZE, 0);
+                        }
+                        fclose(fp);
+                    }
+                    
+```
+
+**client.c**
+```c
+else if (equal(command, "delete")) {
+                        send(sock, command, STR_SIZE, 0);
+                        memset(buffer, 0, sizeof(buffer));
+
+                        scanf("%s", command);
+                        send(sock, command, STR_SIZE, 0);
+                        valread = read(sock, buffer, STR_SIZE);
+
+                        printf("message: %s", buffer);
+                    }
+```
+Jadi pada bagian delete ini, nantinya Client akan mengirimkan command berupa command delete dan nama file yang ingin di-delete kepada server. Lalu, hal itu akan diterima oleh server. Nantinya server akan mengecek apakah file tersebut ada atau tidak, jika ada maka file akan dihapus. Dimana pengecekan ada  tidak nya file ialah melalui pengecekan pada files.tsv. Lalu, apabila file tersebut ada, maka akan dilakukan perubahan nama pada file tersebut, dan di bagian files.tsv nya dilakukan penghapusan pada baris yang terdapat nama file tersebut.
+
+**Hasil**
+![delete](https://user-images.githubusercontent.com/80946219/119262422-62993c00-bc05-11eb-898f-734b5bd4444b.png)
+
 
 ### 1F ###
 Client dapat melihat semua isi files.tsv dengan memanggil suatu perintah yang bernama see. Output dari perintah tersebut keluar dengan format. 
@@ -69,6 +324,8 @@ Contoh Client Command:
 ```
 find TEMP
 ```
+
+
 
 ### 1H ###
 Dikarenakan Keverk waspada dengan pertambahan dan penghapusan file di server, maka Keverk membuat suatu log untuk server yang bernama running.log. Contoh isi dari log ini adalah
